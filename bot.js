@@ -107,21 +107,24 @@ class BotInstance {
   }
 
   async stop() {
-    if (!this.running || !this.client) return;
+    if (!this.running && !this.client) return;
+    this.running = false;
 
     if (this.config?.DISCONNECT_MSG_ENABLED !== false && this.config?.DISCONNECT_MSG) {
-      try {
-        await this.client.say(`#${this.config.CHANNEL}`, this.config.DISCONNECT_MSG);
-      } catch (e) {}
+      this.client.say(`#${this.config.CHANNEL}`, this.config.DISCONNECT_MSG).catch(() => {});
     }
 
     try {
-      await this.client.disconnect();
+      this.client.removeAllListeners();
+      await Promise.race([
+        this.client.disconnect(),
+        new Promise(r => setTimeout(r, 3000)),
+      ]);
     } catch (e) {
       console.error('Disconnect error:', e.message);
     }
 
-    this.running = false;
+    this.client = null;
     this.addLog('Bot stopped', 'warning');
     updateBotStatus(this.uid, { running: false, stoppedAt: new Date().toISOString() });
   }
