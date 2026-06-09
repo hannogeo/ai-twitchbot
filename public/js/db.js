@@ -1,6 +1,6 @@
 const BACKEND_URL = window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')
   ? 'http://localhost:3001'
-  : 'https://YOUR-BACKEND-URL.onrender.com';
+  : 'https://ai-twitchbot-production.up.railway.app';
 
 async function getAuthToken() {
   if (!currentUser) return null;
