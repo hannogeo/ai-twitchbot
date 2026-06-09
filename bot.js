@@ -29,8 +29,8 @@ class BotInstance {
       return;
     }
 
-    const groqKey = this.aiConfig?.api_key || process.env.GROQ_API_KEY || '';
-    this.ai = new AIModule(groqKey);
+    const keys = this.buildGroqKeys();
+    this.ai = new AIModule(keys);
 
     const opts = {
       identity: {
@@ -177,6 +177,14 @@ class BotInstance {
     return 'Say hi!';
   }
 
+  buildGroqKeys() {
+    const serverKey = process.env.GROQ_API_KEY || '';
+    const extraRaw = this.aiConfig?.extra_groq_keys || '';
+    const extraKeys = extraRaw.split('\n').map(k => k.trim()).filter(k => k.startsWith('gsk_'));
+    const allKeys = [serverKey, ...extraKeys].filter(Boolean);
+    return allKeys.length > 0 ? allKeys : [];
+  }
+
   async refreshConfig() {
     if (!this.running) return;
     const newConfig = await getBotConfig(this.uid);
@@ -184,8 +192,8 @@ class BotInstance {
     if (newConfig) this.config = newConfig;
     if (newAiConfig) {
       this.aiConfig = newAiConfig;
-      const key = newAiConfig.api_key || process.env.GROQ_API_KEY || '';
-      if (this.ai) this.ai.setApiKey(key);
+      const keys = this.buildGroqKeys();
+      if (this.ai) this.ai.setApiKeys(keys);
     }
   }
 }

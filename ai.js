@@ -12,15 +12,40 @@ const SEARCH_QUERY_PROMPT = `Create a concise 3-6 word search query based on the
 const SPAM_DOMAINS = ['crazygames', 'worldguessr', 'openguessr', 'geoguesser-free'];
 
 export class AIModule {
-  constructor(apiKey) {
-    this.client = apiKey ? new Groq({ apiKey }) : null;
+  constructor(apiKeys) {
+    this.keys = Array.isArray(apiKeys) ? apiKeys.filter(Boolean) : [];
+    this.clients = this.keys.map(k => (k ? new Groq({ apiKey: k }) : null));
+    this.currentKeyIndex = 0;
     this.conversationHistory = [];
     this.maxHistory = 10;
   }
 
-  setApiKey(apiKey) {
-    this.client = apiKey ? new Groq({ apiKey }) : null;
+  setApiKeys(apiKeys) {
+    this.keys = Array.isArray(apiKeys) ? apiKeys.filter(Boolean) : [];
+    this.clients = this.keys.map(k => (k ? new Groq({ apiKey: k }) : null));
+    this.currentKeyIndex = 0;
     this.conversationHistory = [];
+  }
+
+  async callWithRotation(fn) {
+    if (this.clients.length === 0) return null;
+    const startIndex = this.currentKeyIndex;
+    for (let i = 0; i < this.clients.length; i++) {
+      const index = (startIndex + i) % this.clients.length;
+      const client = this.clients[index];
+      if (!client) continue;
+      try {
+        const result = await fn(client);
+        this.currentKeyIndex = index;
+        return result;
+      } catch (e) {
+        if (e.status === 429 && this.clients.length > 1) {
+          continue;
+        }
+        throw e;
+      }
+    }
+    throw new Error('All API keys rate limited');
   }
 
   async searchWeb(query) {
@@ -55,37 +80,47 @@ export class AIModule {
   }
 
   async getGroqResponse(messages, maxTokens = 300, temperature = 0.6) {
-    if (!this.client) return null;
     try {
-      const completion = await this.client.chat.completions.create({
-        messages,
-        model: 'llama-3.3-70b-versatile',
-        max_tokens: maxTokens,
-        temperature,
+      return await this.callWithRotation(async (client) => {
+        const completion = await client.chat.completions.create({
+          messages,
+          model: 'llama-3.3-70b-versatile',
+          max_tokens: maxTokens,
+          temperature,
+        });
+        return completion.choices[0]?.message?.content?.trim() || null;
       });
-      return completion.choices[0]?.message?.content?.trim() || null;
     } catch (e) {
-      console.error('Groq API error:', e.message);
+      if (e.message === 'All API keys rate limited') {
+        console.error('All Groq API keys rate limited');
+      } else {
+        console.error('Groq API error:', e.message);
+      }
       return null;
     }
   }
 
   async quickGroqResponse(systemPrompt, userMessage, maxTokens = 10, temperature = 0.0) {
-    if (!this.client) return null;
     const model = 'llama-3.1-8b-instant';
     try {
-      const completion = await this.client.chat.completions.create({
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userMessage },
-        ],
-        model,
-        max_tokens: maxTokens,
-        temperature,
+      return await this.callWithRotation(async (client) => {
+        const completion = await client.chat.completions.create({
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userMessage },
+          ],
+          model,
+          max_tokens: maxTokens,
+          temperature,
+        });
+        return completion.choices[0]?.message?.content?.trim() || null;
       });
-      return completion.choices[0]?.message?.content?.trim() || null;
     } catch (e) {
-      console.error('Groq quick API error:', e.message);
+      if (e.message === 'All API keys rate limited') {
+        console.error('All Groq API keys rate limited (quick)');
+      } else {
+        console.error('Groq quick API error:', e.message);
+      }
       return null;
     }
   }
@@ -98,7 +133,7 @@ export class AIModule {
   }
 
   async getAIResponse(userMessage, speakerUsername, systemInstruction = '', chatterContext = {}) {
-    if (!this.client) {
+    if (this.clients.length === 0 || this.clients.every(c => !c)) {
       return 'AI Error: Groq API key not set.';
     }
 
