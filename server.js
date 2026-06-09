@@ -115,6 +115,10 @@ app.get('/api/bot/status', verifyToken, async (req, res) => {
   try {
     firestoreStatus = await getFirebaseStatus(req.uid);
   } catch (e) {}
+  // local status is authoritative; Firestore may lag behind async writes
+  if (firestoreStatus) {
+    delete firestoreStatus.running;
+  }
   res.json({ ...localStatus, ...firestoreStatus });
 });
 

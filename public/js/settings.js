@@ -1,5 +1,7 @@
 const configCache = { botConfig: null, aiConfig: null, botRefreshToken: null, broadcasterRefreshToken: null };
 let contextCache = [];
+let autoSaveTimer = null;
+let autoSaveReady = false;
 
 async function loadConfig() {
   try {
@@ -14,9 +16,12 @@ async function loadConfig() {
     configCache.aiConfig = ai;
     applyBotConfig(bot);
     applyAiConfig(ai);
+    setupAutoSave();
+    return;
   } catch {
     await loadConfigFromFirestore();
   }
+  setupAutoSave();
 }
 
 async function loadConfigFromFirestore() {
@@ -104,55 +109,49 @@ function getAiConfigFromForm() {
   };
 }
 
-async function saveBotConfig() {
-  const btn = document.querySelector('#tab-bot-config .btn-primary');
-  setLoading(btn, true);
+function setSaveStatus(text, cls) {
+  document.getElementById('botSaveStatus').textContent = text;
+  document.getElementById('aiSaveStatus').textContent = text;
+  document.getElementById('botSaveStatus').className = 'save-status' + (cls ? ' ' + cls : '');
+  document.getElementById('aiSaveStatus').className = 'save-status' + (cls ? ' ' + cls : '');
+}
+
+async function doAutoSave() {
+  const botConfig = getBotConfigFromForm();
+  const aiConfig = getAiConfigFromForm();
   try {
-    const botConfig = getBotConfigFromForm();
-    const aiConfig = getAiConfigFromForm();
     await saveConfig(botConfig, aiConfig);
     configCache.botConfig = botConfig;
-    showToast('Bot config saved successfully!', 'success');
-  } catch (e) {
+    configCache.aiConfig = aiConfig;
+    setSaveStatus('Saved ✓', 'saved');
+  } catch {
     try {
       if (currentUser) {
         await db.collection('configs').doc(currentUser.uid).set({
           botConfig: getBotConfigFromForm(),
           aiConfig: getAiConfigFromForm(),
         }, { merge: true });
-        showToast('Bot config saved locally!', 'success');
+        setSaveStatus('Saved ✓', 'saved');
       }
-    } catch (e2) {
-      showToast('Failed to save: ' + e.message, 'error');
+    } catch {
+      setSaveStatus('Save failed', '');
     }
-  } finally {
-    setLoading(btn, false);
   }
 }
 
-async function saveAiConfig() {
-  const btn = document.querySelector('#tab-ai-config .btn-primary');
-  setLoading(btn, true);
-  try {
-    const botConfig = getBotConfigFromForm();
-    const aiConfig = getAiConfigFromForm();
-    await saveConfig(botConfig, aiConfig);
-    configCache.aiConfig = aiConfig;
-    showToast('AI config saved successfully!', 'success');
-  } catch (e) {
-    try {
-      if (currentUser) {
-        await db.collection('configs').doc(currentUser.uid).set({
-          botConfig: getBotConfigFromForm(),
-          aiConfig: getAiConfigFromForm(),
-        }, { merge: true });
-        showToast('AI config saved locally!', 'success');
-      }
-    } catch (e2) {
-      showToast('Failed to save: ' + e.message, 'error');
-    }
-  } finally {
-    setLoading(btn, false);
+function scheduleAutoSave() {
+  setSaveStatus('Unsaved changes...', 'saving');
+  if (autoSaveTimer) clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(doAutoSave, 1500);
+}
+
+function setupAutoSave() {
+  if (autoSaveReady) return;
+  autoSaveReady = true;
+  const inputs = document.querySelectorAll('#tab-bot-config input, #tab-bot-config textarea, #tab-ai-config input, #tab-ai-config textarea');
+  for (const el of inputs) {
+    el.addEventListener('input', scheduleAutoSave);
+    el.addEventListener('change', scheduleAutoSave);
   }
 }
 
@@ -178,6 +177,7 @@ function addChatterContext() {
   infoInput.value = '';
   renderContextList();
   showToast(`Context ${existing !== -1 ? 'updated' : 'added'} for ${user}`, 'success');
+  scheduleAutoSave();
 }
 
 function renderContextList() {
@@ -210,6 +210,7 @@ function deleteContext(index) {
     contextCache.splice(index, 1);
     renderContextList();
     showToast('Context deleted.', 'info');
+    scheduleAutoSave();
     closeModal();
   });
 }

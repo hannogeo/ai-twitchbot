@@ -211,6 +211,9 @@ input, textarea, select, button { font-family: inherit; font-size: .9rem; }
 .config-card .form-inline { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .config-card .trigger-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .config-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
+.save-status { font-size: .82rem; color: var(--text3); padding: 8px 0; }
+.save-status.saving { color: var(--accent); }
+.save-status.saved { color: var(--green); }
 
 /* Chatter context list */
 .context-list { margin-top: 14px; }
