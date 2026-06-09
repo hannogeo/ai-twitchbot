@@ -1,0 +1,17 @@
+dist/
+build/
+*.spec
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+*.egg/
+env/
+venv/
+.venv/
+*.log
+update_setup.exe
+data/
+node_modules/
+.env
+backend/service-account.json

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<title>AI Twitch Bot</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div id="loadingPage" class="loading-page">
+  <div class="spinner"></div>
+  <span>Loading...</span>
+</div>
+
+<!-- Landing page (shown when not authenticated) -->
+<div id="page-landing" class="landing" style="display:none">
+  <div class="landing-header">
+    <h1><span>AI</span> Twitch Bot</h1>
+    <div>
+      <button class="btn btn-ghost btn-sm" onclick="navigate('login')">Sign In</button>
+    </div>
+  </div>
+  <div class="landing-hero">
+    <h2><span>AI-Powered</span> Twitch Chat Bot</h2>
+    <p>Your stream's smartest chatter. Responds with Groq AI, searches the web, and learns about your community.</p>
+    <button class="btn btn-primary" onclick="navigate('login')">Get Started Free</button>
+  </div>
+  <div class="landing-features">
+    <div class="feature-card">
+      <div class="icon">🤖</div>
+      <h3>AI Chat</h3>
+      <p>Powered by Groq's llama-3.3-70b. Natural, contextual responses to your chat.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🌐</div>
+      <h3>Web Search</h3>
+      <p>Automatically searches DuckDuckGo for current info when someone asks a question.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🎭</div>
+      <h3>Per-User Context</h3>
+      <p>Store custom context about your chatters for personalized AI responses.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">⚡</div>
+      <h3>Multiple Triggers</h3>
+      <p>Trigger by @mention, !commands, or replies. Fully customizable.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🔒</div>
+      <h3>Secure & Free</h3>
+      <p>Your data is secure with Firebase. No hidden costs. Just connect your Twitch accounts.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🔄</div>
+      <h3>Always On</h3>
+      <p>Bot runs in the cloud. No need to keep your browser open while streaming.</p>
+    </div>
+  </div>
+  <div class="landing-footer">
+    <a href="https://github.com/hannogeo/ai-twitch-bot" target="_blank">GitHub</a>
+  </div>
+</div>
+
+<!-- Auth page -->
+<div id="page-auth" style="display:none">
+  <div class="auth-page">
+    <div class="auth-card">
+      <h2><span>AI</span> Twitch Bot</h2>
+      <p class="sub">Sign in to manage your bot</p>
+
+      <div id="authError" class="auth-error"></div>
+
+      <div id="authForm">
+        <div class="form-group">
+          <label for="authEmail">Email</label>
+          <input type="email" id="authEmail" class="form-input" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="authPassword">Password</label>
+          <input type="password" id="authPassword" class="form-input" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button id="authSubmitBtn" class="btn btn-primary" style="width:100%;margin-top:4px" onclick="handleAuth()">
+          Sign In
+        </button>
+      </div>
+
+      <div class="auth-divider">or</div>
+
+      <button class="btn btn-secondary" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px" onclick="signInWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continue with Google
+      </button>
+
+      <div class="auth-toggle">
+        <span id="authToggleText">Don't have an account?</span>
+        <a id="authToggleLink" onclick="toggleAuthMode()">Sign Up</a>
+      </div>
+
+      <div style="text-align:center;margin-top:12px">
+        <a onclick="navigate('landing')" style="cursor:pointer;font-size:.8rem;color:var(--text3)">&larr; Back to home</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- App layout (shown when authenticated) -->
+<div id="app-layout" class="app-layout" style="display:none">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <h1><span>AI</span> Bot</h1>
+      <p>Twitch Chat Bot</p>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
+        <span class="icon">📊</span><span>Dashboard</span>
+      </button>
+      <button class="nav-item" data-page="settings" onclick="navigate('settings')">
+        <span class="icon">⚙️</span><span>Settings</span>
+      </button>
+    </nav>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="userAvatar">?</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" id="userName">User</div>
+        <div class="sidebar-user-email" id="userEmail">user@email.com</div>
+      </div>
+      <button class="logout-btn" onclick="confirmSignOut()" title="Sign out">⏻</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="main-header">
+      <div>
+        <h2 id="pageTitle">Dashboard</h2>
+        <p id="pageSubtitle">Bot status and activity</p>
+      </div>
+    </div>
+    <div class="main-content">
+
+      <!-- Dashboard page -->
+      <div id="page-dashboard" class="page active">
+        <div id="statusBar" class="status-bar offline">
+          <div class="status-dot offline"></div>
+          <div>
+            <div class="status-text offline">Bot Offline</div>
+            <div class="status-sub" id="statusSub">Start the bot to connect to Twitch</div>
+          </div>
+          <div style="margin-left:auto;display:flex;gap:8px">
+            <button id="botStartBtn" class="btn btn-primary btn-sm" onclick="botAction('start')">Start Bot</button>
+            <button id="botStopBtn" class="btn btn-danger btn-sm" onclick="botAction('stop')" style="display:none">Stop Bot</button>
+            <button id="botRestartBtn" class="btn btn-secondary btn-sm" onclick="botAction('restart')" style="display:none">Restart</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-title">Activity Log</div>
+          <div class="card-desc">Real-time bot activity in your channel</div>
+          <div id="logViewer" class="log-viewer">
+            <div style="color:var(--text3);text-align:center;padding:40px 0">Bot not running. Start the bot to see activity.</div>
+          </div>
+        </div>
+
+        <div class="config-grid">
+          <div class="card">
+            <div class="card-title">Quick Info</div>
+            <div class="card-desc">Current bot configuration overview</div>
+            <div class="card-divider"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:.85rem">
+              <div><span style="color:var(--text2)">Channel:</span> <span id="infoChannel">—</span></div>
+              <div><span style="color:var(--text2)">Bot Username:</span> <span id="infoNick">—</span></div>
+              <div><span style="color:var(--text2)">AI Status:</span> <span id="infoAiStatus">—</span></div>
+              <div><span style="color:var(--text2)">Triggers:</span> <span id="infoTriggers">—</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings page -->
+      <div id="page-settings" class="page">
+        <div class="tabs">
+          <button class="tab active" data-tab="bot-config" onclick="switchTab('bot-config')">Bot Config</button>
+          <button class="tab" data-tab="ai-config" onclick="switchTab('ai-config')">AI Config</button>
+        </div>
+
+        <div id="tab-bot-config" class="tab-content active">
+          <div class="config-grid">
+            <div class="card config-card">
+              <div class="card-title">Twitch Connection</div>
+              <div class="card-desc">Connect your Twitch bot account and set the target channel</div>
+              <div class="card-divider"></div>
+
+              <div class="form-group">
+                <label>Twitch Bot Account</label>
+                <button class="btn btn-secondary btn-sm" onclick="connectTwitch('bot')">
+                  <span id="botTwitchStatus">Connect Bot Account</span>
+                </button>
+                <div class="hint">The account that will send messages in chat.</div>
+              </div>
+
+              <div class="form-group">
+                <label>Broadcaster Channel</label>
+                <button class="btn btn-secondary btn-sm" onclick="connectTwitch('broadcaster')">
+                  <span id="broadcasterTwitchStatus">Connect Broadcaster Account</span>
+                </button>
+                <div class="hint">The channel where the bot will be active.</div>
+              </div>
+
+              <div class="form-group">
+                <label for="configChannel">Channel Name</label>
+                <input type="text" id="configChannel" class="form-input" placeholder="your_channel_name">
+                <div class="hint">The channel the bot will join (don't include #).</div>
+              </div>
+
+              <div class="form-group">
+                <label for="configNick">Bot Username</label>
+                <input type="text" id="configNick" class="form-input" placeholder="MyBot">
+                <div class="hint">The username of your bot account.</div>
+              </div>
+            </div>
+
+            <div class="card config-card">
+              <div class="card-title">Trigger Settings</div>
+              <div class="card-desc">Configure how the bot is triggered in chat</div>
+              <div class="card-divider"></div>
+              <div class="trigger-grid">
+                <label class="form-switch">
+                  <input type="checkbox" id="triggerTag">
+                  <div class="switch-track"></div>
+                  @mention trigger
+                </label>
+                <label class="form-switch">
+                  <input type="checkbox" id="triggerCmd">
+                  <div class="switch-track"></div>
+                  Command trigger
+                </label>
+                <label class="form-switch">
+                  <input type="checkbox" id="triggerRep">
+                  <div class="switch-track"></div>
+                  Direct reply trigger
+                </label>
+                <label class="form-switch">
+                  <input type="checkbox" id="triggerOtherRep">
+                  <div class="switch-track"></div>
+                  Allow in other replies
+                </label>
+              </div>
+
+              <div class="form-group" style="margin-top:16px">
+                <label for="configCommands">Custom Commands</label>
+                <input type="text" id="configCommands" class="form-input" placeholder="!ai, !aichat">
+                <div class="hint">Comma-separated list of command prefixes.</div>
+              </div>
+            </div>
+
+            <div class="card config-card">
+              <div class="card-title">Connect / Disconnect Messages</div>
+              <div class="card-desc">Messages the bot sends when it connects or disconnects</div>
+              <div class="card-divider"></div>
+              <div class="form-inline">
+                <div class="form-group">
+                  <label class="form-switch">
+                    <input type="checkbox" id="connectMsgEnabled">
+                    <div class="switch-track"></div>
+                    Connect message
+                  </label>
+                  <input type="text" id="connectMsg" class="form-input" placeholder="/me is now connected..." style="margin-top:8px">
+                </div>
+                <div class="form-group">
+                  <label class="form-switch">
+                    <input type="checkbox" id="disconnectMsgEnabled">
+                    <div class="switch-track"></div>
+                    Disconnect message
+                  </label>
+                  <input type="text" id="disconnectMsg" class="form-input" placeholder="/me disconnected!" style="margin-top:8px">
+                </div>
+              </div>
+            </div>
+
+            <div class="card config-card">
+              <div class="card-title">Twitch API Tokens</div>
+              <div class="card-desc">OAuth tokens for the bot and broadcaster accounts</div>
+              <div class="card-divider"></div>
+
+              <div class="form-group">
+                <label for="configBotToken">Bot Access Token</label>
+                <input type="password" id="configBotToken" class="form-input" placeholder="oauth:...">
+                <div class="hint">Connected via Twitch login above. Manually paste if needed.</div>
+              </div>
+
+              <div class="form-group">
+                <label for="configBroadcasterToken">Broadcaster Access Token</label>
+                <input type="password" id="configBroadcasterToken" class="form-input" placeholder="oauth:...">
+                <div class="hint">Connected via Twitch login above.</div>
+              </div>
+            </div>
+
+            <div class="config-actions">
+              <button class="btn btn-primary" onclick="saveBotConfig()">Save Bot Config</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-ai-config" class="tab-content">
+          <div class="config-grid">
+            <div class="card config-card">
+              <div class="card-title">AI Settings</div>
+              <div class="card-desc">Configure the AI brain of your bot</div>
+              <div class="card-divider"></div>
+
+              <div class="form-group">
+                <label class="form-switch">
+                  <input type="checkbox" id="aiEnabled">
+                  <div class="switch-track"></div>
+                  AI Brain Enabled
+                </label>
+              </div>
+
+              <div class="form-group">
+                <label for="groqApiKey">Groq API Key</label>
+                <input type="password" id="groqApiKey" class="form-input" placeholder="gsk_...">
+                <div class="hint">Get a free key at <a href="https://console.groq.com/keys" target="_blank">console.groq.com</a></div>
+              </div>
+
+              <div class="form-group">
+                <label for="systemInstruction">System Instruction</label>
+                <textarea id="systemInstruction" class="form-textarea" rows="4" placeholder="You are a helpful AI Twitch bot."></textarea>
+                <div class="hint">Sets the bot's personality and behavior.</div>
+              </div>
+            </div>
+
+            <div class="card config-card">
+              <div class="card-title">Chatter Context</div>
+              <div class="card-desc">Store custom context about individual chatters for personalized responses</div>
+              <div class="card-divider"></div>
+
+              <div style="display:flex;gap:8px;margin-bottom:14px">
+                <input type="text" id="newContextUser" class="form-input" placeholder="Username" style="flex:1">
+                <input type="text" id="newContextInfo" class="form-input" placeholder="Context info (e.g., loves coffee)" style="flex:2">
+                <button class="btn btn-primary btn-sm" onclick="addChatterContext()">Add</button>
+              </div>
+
+              <div id="contextList" class="context-list">
+                <div style="color:var(--text3);font-size:.82rem;text-align:center;padding:20px 0">No chatter contexts added yet.</div>
+              </div>
+            </div>
+
+            <div class="config-actions">
+              <button class="btn btn-primary" onclick="saveAiConfig()">Save AI Config</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 404 page -->
+      <div id="page-404" class="page">
+        <div class="not-found">
+          <h2>404</h2>
+          <p>This page doesn't exist.</p>
+          <button class="btn btn-primary" onclick="navigate('dashboard')">Go to Dashboard</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal overlay -->
+<div id="modalOverlay" class="modal-overlay">
+  <div class="modal">
+    <h3 id="modalTitle">Confirm</h3>
+    <p id="modalMessage">Are you sure?</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button id="modalConfirmBtn" class="btn btn-danger" onclick="closeModal()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toasts container -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- Firebase App (compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<!-- App scripts -->
+<script src="/js/firebase-config.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/ui.js"></script>
+<script src="/js/db.js"></script>
+<script src="/js/twitch-oauth.js"></script>
+<script src="/js/settings.js"></script>
+<script src="/js/dashboard.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>
