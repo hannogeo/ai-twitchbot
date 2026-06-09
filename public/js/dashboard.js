@@ -108,7 +108,6 @@ async function botAction(action) {
 
   if (action === 'stop') {
     showModal('Stop Bot', 'Are you sure you want to stop the bot?', async () => {
-      closeModal();
       setLoading(btn, true);
       try {
         await botStop();

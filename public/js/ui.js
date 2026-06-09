@@ -24,6 +24,7 @@ function closeModal() {
 
 document.getElementById('modalConfirmBtn').addEventListener('click', () => {
   if (modalCallback) modalCallback();
+  closeModal();
 });
 
 document.getElementById('modalOverlay').addEventListener('click', (e) => {
