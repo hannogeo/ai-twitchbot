@@ -41,6 +41,14 @@ function applyBotConfig(bot) {
   document.getElementById('configNick').value = bot.NICK || '';
   document.getElementById('configBotToken').value = bot.TOKEN || '';
   document.getElementById('configBroadcasterToken').value = bot.BROADCASTER_TOKEN || '';
+
+  const botStatus = document.getElementById('botTwitchStatus');
+  botStatus.textContent = bot.TOKEN ? 'Bot Account Connected' : 'Connect Bot Account';
+  botStatus.style.color = bot.TOKEN ? 'var(--green)' : '';
+  const bcStatus = document.getElementById('broadcasterTwitchStatus');
+  bcStatus.textContent = bot.BROADCASTER_TOKEN ? 'Broadcaster Account Connected' : 'Connect Broadcaster Account';
+  bcStatus.style.color = bot.BROADCASTER_TOKEN ? 'var(--green)' : '';
+
   document.getElementById('triggerTag').checked = bot.TRIGGER_TAG !== false;
   document.getElementById('triggerCmd').checked = bot.TRIGGER_CMD !== false;
   document.getElementById('triggerRep').checked = bot.TRIGGER_REP !== false;
