@@ -69,7 +69,6 @@ function applyAiConfig(ai) {
   document.getElementById('aiEnabled').checked = ai.enabled !== false;
   
   document.getElementById('systemInstruction').value = ai.system_instruction || 'You are a helpful AI Twitch bot.';
-  document.getElementById('extraGroqKeys').value = ai.extra_groq_keys || '';
   contextCache = [];
   if (ai.chatter_context) {
     for (const [user, info] of Object.entries(ai.chatter_context)) {
@@ -106,7 +105,6 @@ function getAiConfigFromForm() {
     enabled: document.getElementById('aiEnabled').checked,
     api_key: '',
     system_instruction: document.getElementById('systemInstruction').value.trim() || 'You are a helpful AI Twitch bot.',
-    extra_groq_keys: document.getElementById('extraGroqKeys').value.trim(),
     chatter_context: context,
   };
 }

@@ -178,11 +178,13 @@ class BotInstance {
   }
 
   buildGroqKeys() {
-    const serverKey = process.env.GROQ_API_KEY || '';
-    const extraRaw = this.aiConfig?.extra_groq_keys || '';
-    const extraKeys = extraRaw.split('\n').map(k => k.trim()).filter(k => k.startsWith('gsk_'));
-    const allKeys = [serverKey, ...extraKeys].filter(Boolean);
-    return allKeys.length > 0 ? allKeys : [];
+    const keys = [];
+    for (let i = 1; ; i++) {
+      const key = process.env[`GROQ_API_KEY${i === 1 ? '' : '_' + i}`];
+      if (!key) break;
+      keys.push(key);
+    }
+    return keys.length > 0 ? keys : [];
   }
 
   async refreshConfig() {

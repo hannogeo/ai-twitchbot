@@ -173,13 +173,7 @@ app.post('/api/config/save', verifyToken, async (req, res) => {
     if (aiConfig) {
       update.aiConfig = aiConfig;
       const bot = getBot(req.uid);
-      if (bot && bot.ai) {
-        const serverKey = process.env.GROQ_API_KEY || '';
-        const extraRaw = aiConfig.extra_groq_keys || '';
-        const extraKeys = extraRaw.split('\n').map(k => k.trim()).filter(k => k.startsWith('gsk_'));
-        const allKeys = [serverKey, ...extraKeys].filter(Boolean);
-        bot.ai.setApiKeys(allKeys);
-      }
+      if (bot && bot.ai) bot.ai.setApiKeys(bot.buildGroqKeys());
     }
     await db.collection('configs').doc(req.uid).set(update, { merge: true });
     const bot = getBot(req.uid);
