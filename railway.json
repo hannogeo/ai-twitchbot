@@ -2,8 +2,7 @@
   "build": {
     "builder": "nixpacks",
     "buildCommand": "npm install",
-    "startCommand": "node server.js",
-    "watchPatterns": ["*.js"]
+    "startCommand": "node server.js"
   },
   "deploy": {
     "restartPolicyType": "always",
