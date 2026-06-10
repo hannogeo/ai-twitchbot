@@ -112,6 +112,7 @@ function setSaveStatus(text, cls) {
 }
 
 async function doAutoSave() {
+  if (checkSameAccount()) return;
   const botConfig = getBotConfigFromForm();
   const aiConfig = getAiConfigFromForm();
   try {
@@ -134,7 +135,25 @@ async function doAutoSave() {
   }
 }
 
+function checkSameAccount() {
+  const channel = document.getElementById('configChannel').value.trim().toLowerCase();
+  const nick = document.getElementById('configNick').value.trim().toLowerCase();
+  const warn = document.getElementById('sameAccountWarning');
+  if (channel && nick && channel === nick) {
+    warn.style.display = '';
+    return true;
+  }
+  warn.style.display = 'none';
+  return false;
+}
+
 function scheduleAutoSave() {
+  if (checkSameAccount()) {
+    setSaveStatus('Same account — can\'t save', '');
+    if (autoSaveTimer) clearTimeout(autoSaveTimer);
+    autoSaveTimer = null;
+    return;
+  }
   setSaveStatus('Unsaved changes...', 'saving');
   if (autoSaveTimer) clearTimeout(autoSaveTimer);
   autoSaveTimer = setTimeout(doAutoSave, 1500);
@@ -148,6 +167,8 @@ function setupAutoSave() {
     el.addEventListener('input', scheduleAutoSave);
     el.addEventListener('change', scheduleAutoSave);
   }
+  document.getElementById('configChannel').addEventListener('input', checkSameAccount);
+  document.getElementById('configNick').addEventListener('input', checkSameAccount);
 }
 
 function addChatterContext() {

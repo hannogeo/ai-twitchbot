@@ -141,6 +141,7 @@ input, textarea, select, button { font-family: inherit; font-size: .9rem; }
 .form-group { margin-bottom: 16px; }
 .form-group label { display: block; font-size: .82rem; font-weight: 500; color: var(--text2); margin-bottom: 5px; }
 .form-group .hint { font-size: .75rem; color: var(--text3); margin-top: 3px; }
+.form-warning { font-size: .75rem; color: var(--red); margin-top: 6px; padding: 6px 10px; background: rgba(255,70,70,.1); border-radius: 6px; }
 .form-input, .form-select, .form-textarea {
   width: 100%; padding: 9px 12px; background: var(--bg3); border: 1px solid var(--border);
   border-radius: 6px; color: var(--text); transition: border-color .15s;
