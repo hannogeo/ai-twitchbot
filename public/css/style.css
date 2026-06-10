@@ -96,23 +96,21 @@ input, textarea, select, button { font-family: inherit; font-size: .9rem; }
 .landing-header h1 span { color: var(--accent); }
 .landing-hero {
   text-align: center; padding: 80px 24px 50px;
-  background: linear-gradient(180deg, rgba(137,86,251,.06) 0%, transparent 100%);
 }
-.landing-hero h2 { font-size: 2.6rem; font-weight: 800; color: #f0f6fc; letter-spacing: -.5px; }
-.landing-hero h2 span { color: var(--accent); }
-.landing-hero p { font-size: 1.1rem; color: var(--text2); margin-top: 10px; max-width: 520px; margin-inline: auto; }
+.landing-hero h2 { font-size: 2.4rem; font-weight: 700; color: #f0f6fc; letter-spacing: -.3px; max-width: 600px; margin: 0 auto; line-height: 1.25; }
+.landing-hero p { font-size: 1rem; color: var(--text2); margin-top: 12px; max-width: 480px; margin-inline: auto; line-height: 1.5; }
 .landing-hero .btn { margin-top: 28px; }
 .landing-features {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;
   max-width: 820px; margin: 0 auto; padding: 0 24px 50px;
 }
 .feature-card {
   background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 22px; text-align: center;
+  padding: 22px; text-align: left;
 }
-.feature-card .icon { font-size: 1.6rem; margin-bottom: 10px; }
+.feature-card .icon { margin-bottom: 10px; color: var(--accent); }
 .feature-card h3 { font-size: .9rem; font-weight: 600; color: #f0f6fc; margin-bottom: 6px; }
-.feature-card p { font-size: .82rem; color: var(--text2); }
+.feature-card p { font-size: .82rem; color: var(--text2); line-height: 1.45; }
 .landing-footer {
   text-align: center; padding: 20px; font-size: .8rem; color: var(--text3);
   border-top: 1px solid var(--border); margin-top: auto;
