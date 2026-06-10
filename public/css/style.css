@@ -8,9 +8,9 @@
   --text: #c9d1d9;
   --text2: #8b949e;
   --text3: #484f58;
-  --accent: #9147ff;
-  --accent-hover: #772ce8;
-  --accent-dim: rgba(145, 71, 255, .15);
+  --accent: #8956FB;
+  --accent-hover: #7744E8;
+  --accent-dim: rgba(137, 86, 251, .15);
   --green: #3fb950;
   --red: #f85149;
   --yellow: #d29922;
@@ -96,7 +96,7 @@ input, textarea, select, button { font-family: inherit; font-size: .9rem; }
 .landing-header h1 span { color: var(--accent); }
 .landing-hero {
   text-align: center; padding: 80px 24px 50px;
-  background: linear-gradient(180deg, rgba(145,71,255,.06) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(137,86,251,.06) 0%, transparent 100%);
 }
 .landing-hero h2 { font-size: 2.6rem; font-weight: 800; color: #f0f6fc; letter-spacing: -.5px; }
 .landing-hero h2 span { color: var(--accent); }
@@ -125,7 +125,7 @@ input, textarea, select, button { font-family: inherit; font-size: .9rem; }
   border: none; cursor: pointer; transition: all .15s; text-decoration: none; line-height: 1.4;
 }
 .btn-primary { background: var(--accent); color: #fff; }
-.btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(145,71,255,.3); }
+.btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(137,86,251,.3); }
 .btn-secondary { background: var(--bg4); color: var(--text); border: 1px solid var(--border); }
 .btn-secondary:hover { background: var(--bg3); border-color: var(--text3); }
 .btn-danger { background: var(--red); color: #fff; }
