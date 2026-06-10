@@ -189,23 +189,15 @@
           <div class="config-grid">
             <div class="card config-card">
               <div class="card-title">Twitch Connection</div>
-              <div class="card-desc">Connect your Twitch bot account and set the target channel</div>
+              <div class="card-desc">Connect your Twitch bot account</div>
               <div class="card-divider"></div>
 
               <div class="form-group">
                 <label>Twitch Bot Account</label>
-                <button class="btn btn-secondary btn-sm" onclick="connectTwitch('bot')">
+                <button class="btn btn-secondary btn-sm" onclick="connectTwitch()">
                   <span id="botTwitchStatus">Connect Bot Account</span>
                 </button>
                 <div class="hint">The account that will send messages in chat.</div>
-              </div>
-
-              <div class="form-group">
-                <label>Broadcaster Channel</label>
-                <button class="btn btn-secondary btn-sm" onclick="connectTwitch('broadcaster')">
-                  <span id="broadcasterTwitchStatus">Connect Broadcaster Account</span>
-                </button>
-                <div class="hint">The channel where the bot will be active.</div>
               </div>
 
               <div class="form-group">
@@ -280,20 +272,14 @@
             </div>
 
             <div class="card config-card">
-              <div class="card-title">Twitch API Tokens</div>
-              <div class="card-desc">OAuth tokens for the bot and broadcaster accounts</div>
+              <div class="card-title">Twitch API Token</div>
+              <div class="card-desc">Access token for your bot account</div>
               <div class="card-divider"></div>
 
               <div class="form-group">
                 <label for="configBotToken">Bot Access Token</label>
                 <input type="password" id="configBotToken" class="form-input" placeholder="oauth:...">
                 <div class="hint">Connected via Twitch login above. Manually paste if needed.</div>
-              </div>
-
-              <div class="form-group">
-                <label for="configBroadcasterToken">Broadcaster Access Token</label>
-                <input type="password" id="configBroadcasterToken" class="form-input" placeholder="oauth:...">
-                <div class="hint">Connected via Twitch login above.</div>
               </div>
             </div>
 

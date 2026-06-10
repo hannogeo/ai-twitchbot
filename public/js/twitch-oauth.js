@@ -1,12 +1,7 @@
 const TWITCH_CLIENT_ID = 'n8ka0hxngj74aia7ffjli38ug3dsc2';
 const REDIRECT_URI = window.location.origin + '/twitch/callback';
 
-let twitchAccountType = 'bot';
-
-async function connectTwitch(accountType) {
-  twitchAccountType = accountType;
-  sessionStorage.setItem('twitch_account_type', accountType);
-
+async function connectTwitch() {
   const params = new URLSearchParams({
     client_id: TWITCH_CLIENT_ID,
     redirect_uri: REDIRECT_URI,
@@ -32,9 +27,6 @@ async function handleTwitchCallback() {
 
   if (!code) return;
 
-  const accountType = sessionStorage.getItem('twitch_account_type') || 'bot';
-  sessionStorage.removeItem('twitch_account_type');
-
   try {
     const data = await exchangeTwitchCode(code);
 
@@ -47,27 +39,15 @@ async function handleTwitchCallback() {
 
     const userInfo = await getTwitchUser(data.access_token);
 
-    if (accountType === 'bot') {
-      document.getElementById('configBotToken').value = data.access_token;
-      if (data.refresh_token) configCache.botRefreshToken = data.refresh_token;
-      const statusEl = document.getElementById('botTwitchStatus');
-      statusEl.textContent = 'Bot Account Connected';
-      statusEl.style.color = 'var(--green)';
-      if (userInfo) {
-        document.getElementById('configNick').value = userInfo.login || '';
-      }
-      showToast('Bot Twitch account connected!', 'success');
-    } else {
-      document.getElementById('configBroadcasterToken').value = data.access_token;
-      if (data.refresh_token) configCache.broadcasterRefreshToken = data.refresh_token;
-      const statusEl = document.getElementById('broadcasterTwitchStatus');
-      statusEl.textContent = 'Broadcaster Account Connected';
-      statusEl.style.color = 'var(--green)';
-      if (userInfo) {
-        document.getElementById('configChannel').value = userInfo.login || '';
-      }
-      showToast('Broadcaster Twitch account connected!', 'success');
+    document.getElementById('configBotToken').value = data.access_token;
+    if (data.refresh_token) configCache.botRefreshToken = data.refresh_token;
+    const statusEl = document.getElementById('botTwitchStatus');
+    statusEl.textContent = 'Bot Account Connected';
+    statusEl.style.color = 'var(--green)';
+    if (userInfo) {
+      document.getElementById('configNick').value = userInfo.login || '';
     }
+    showToast('Twitch account connected!', 'success');
   } catch (e) {
     showToast('Failed to connect Twitch account: ' + e.message, 'error');
   }

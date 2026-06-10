@@ -1,4 +1,4 @@
-const configCache = { botConfig: null, aiConfig: null, botRefreshToken: null, broadcasterRefreshToken: null };
+const configCache = { botConfig: null, aiConfig: null, botRefreshToken: null };
 let contextCache = [];
 let autoSaveTimer = null;
 let autoSaveReady = false;
@@ -45,14 +45,10 @@ function applyBotConfig(bot) {
   document.getElementById('configChannel').value = bot.CHANNEL || '';
   document.getElementById('configNick').value = bot.NICK || '';
   document.getElementById('configBotToken').value = bot.TOKEN || '';
-  document.getElementById('configBroadcasterToken').value = bot.BROADCASTER_TOKEN || '';
 
   const botStatus = document.getElementById('botTwitchStatus');
   botStatus.textContent = bot.TOKEN ? 'Bot Account Connected' : 'Connect Bot Account';
   botStatus.style.color = bot.TOKEN ? 'var(--green)' : '';
-  const bcStatus = document.getElementById('broadcasterTwitchStatus');
-  bcStatus.textContent = bot.BROADCASTER_TOKEN ? 'Broadcaster Account Connected' : 'Connect Broadcaster Account';
-  bcStatus.style.color = bot.BROADCASTER_TOKEN ? 'var(--green)' : '';
 
   document.getElementById('triggerTag').checked = bot.TRIGGER_TAG !== false;
   document.getElementById('triggerCmd').checked = bot.TRIGGER_CMD !== false;
@@ -83,7 +79,6 @@ function getBotConfigFromForm() {
     CHANNEL: document.getElementById('configChannel').value.trim().replace('#', ''),
     NICK: document.getElementById('configNick').value.trim(),
     TOKEN: document.getElementById('configBotToken').value.trim(),
-    BROADCASTER_TOKEN: document.getElementById('configBroadcasterToken').value.trim(),
     TRIGGER_TAG: document.getElementById('triggerTag').checked,
     TRIGGER_CMD: document.getElementById('triggerCmd').checked,
     TRIGGER_REP: document.getElementById('triggerRep').checked,
