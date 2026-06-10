@@ -55,7 +55,8 @@ input, textarea, select, button { font-family: inherit; font-size: .9rem; }
 }
 .nav-item:hover { background: var(--bg3); color: var(--text); }
 .nav-item.active { background: var(--accent-dim); color: var(--accent); font-weight: 500; }
-.nav-item .icon { font-size: 1.1rem; width: 22px; text-align: center; }
+.nav-item .icon { display: inline-flex; width: 22px; justify-content: center; }
+.nav-item .icon svg { display: block; }
 .sidebar-user {
   padding: 14px 16px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px;
 }
