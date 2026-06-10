@@ -69,7 +69,7 @@ class BotInstance {
     });
 
     this.client.on('message', async (channel, tags, message, self) => {
-      if (self || !this.aiConfig?.enabled) return;
+      if (self) return;
 
       const canTrigger = this.checkTriggers(tags, message);
       if (!canTrigger) return;

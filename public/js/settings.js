@@ -62,8 +62,6 @@ function applyBotConfig(bot) {
 }
 
 function applyAiConfig(ai) {
-  document.getElementById('aiEnabled').checked = ai.enabled !== false;
-  
   document.getElementById('systemInstruction').value = ai.system_instruction || 'You are a helpful AI Twitch bot.';
   contextCache = [];
   if (ai.chatter_context) {
@@ -97,7 +95,6 @@ function getAiConfigFromForm() {
     context[item.user.toLowerCase()] = item.info;
   }
   return {
-    enabled: document.getElementById('aiEnabled').checked,
     api_key: '',
     system_instruction: document.getElementById('systemInstruction').value.trim() || 'You are a helpful AI Twitch bot.',
     chatter_context: context,

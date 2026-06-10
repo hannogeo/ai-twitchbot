@@ -61,7 +61,7 @@ function updateInfoPanel(status) {
   const ai = configCache.aiConfig || {};
   document.getElementById('infoChannel').textContent = cfg.CHANNEL || '—';
   document.getElementById('infoNick').textContent = cfg.NICK || '—';
-  document.getElementById('infoAiStatus').textContent = ai.enabled !== false ? 'Enabled' : 'Disabled';
+  document.getElementById('infoAiStatus').textContent = 'Enabled';
   const triggers = [];
   if (cfg.TRIGGER_TAG !== false) triggers.push('@mention');
   if (cfg.TRIGGER_CMD !== false) triggers.push('commands');
