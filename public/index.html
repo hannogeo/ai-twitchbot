@@ -195,76 +195,67 @@
               </div>
 
               <input type="hidden" id="configNick">
+              <input type="hidden" id="configBotToken">
               <div id="sameAccountWarning" class="form-warning" style="display:none">Bot username and channel name can't be the same. The bot must be a different account from the channel it operates in.</div>
             </div>
 
-            <div class="card config-card">
-              <div class="card-title">Trigger Settings</div>
-              <div class="card-desc">Configure how the bot is triggered in chat</div>
-              <div class="card-divider"></div>
-              <div class="trigger-grid">
-                <label class="form-switch">
-                  <input type="checkbox" id="triggerTag">
-                  <div class="switch-track"></div>
-                  @mention trigger
-                </label>
-                <label class="form-switch">
-                  <input type="checkbox" id="triggerCmd">
-                  <div class="switch-track"></div>
-                  Command trigger
-                </label>
-                <label class="form-switch">
-                  <input type="checkbox" id="triggerRep">
-                  <div class="switch-track"></div>
-                  Direct reply trigger
-                </label>
-                <label class="form-switch">
-                  <input type="checkbox" id="triggerOtherRep">
-                  <div class="switch-track"></div>
-                  Allow in other replies
-                </label>
-              </div>
-
-              <div class="form-group" style="margin-top:16px">
-                <label for="configCommands">Custom Commands</label>
-                <input type="text" id="configCommands" class="form-input" placeholder="!ai, !aichat">
-                <div class="hint">Comma-separated list of command prefixes.</div>
-              </div>
-            </div>
-
-            <div class="card config-card">
-              <div class="card-title">Connect / Disconnect Messages</div>
-              <div class="card-desc">Messages the bot sends when it connects or disconnects</div>
-              <div class="card-divider"></div>
-              <div class="form-inline">
-                <div class="form-group">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+              <div class="card config-card">
+                <div class="card-title">Trigger Settings</div>
+                <div class="card-desc">Configure how the bot is triggered in chat</div>
+                <div class="card-divider"></div>
+                <div class="trigger-grid">
                   <label class="form-switch">
-                    <input type="checkbox" id="connectMsgEnabled">
+                    <input type="checkbox" id="triggerTag">
                     <div class="switch-track"></div>
-                    Connect message
+                    @mention trigger
                   </label>
-                  <input type="text" id="connectMsg" class="form-input" placeholder="/me is now connected..." style="margin-top:8px">
+                  <label class="form-switch">
+                    <input type="checkbox" id="triggerCmd">
+                    <div class="switch-track"></div>
+                    Command trigger
+                  </label>
+                  <label class="form-switch">
+                    <input type="checkbox" id="triggerRep">
+                    <div class="switch-track"></div>
+                    Direct reply trigger
+                  </label>
+                  <label class="form-switch">
+                    <input type="checkbox" id="triggerOtherRep">
+                    <div class="switch-track"></div>
+                    Allow in other replies
+                  </label>
                 </div>
-                <div class="form-group">
-                  <label class="form-switch">
-                    <input type="checkbox" id="disconnectMsgEnabled">
-                    <div class="switch-track"></div>
-                    Disconnect message
-                  </label>
-                  <input type="text" id="disconnectMsg" class="form-input" placeholder="/me disconnected!" style="margin-top:8px">
+
+                <div class="form-group" style="margin-top:16px">
+                  <label for="configCommands">Custom Commands</label>
+                  <input type="text" id="configCommands" class="form-input" placeholder="!ai, !aichat">
+                  <div class="hint">Comma-separated list of command prefixes.</div>
                 </div>
               </div>
-            </div>
 
-            <div class="card config-card">
-              <div class="card-title">Twitch API Token</div>
-              <div class="card-desc">Access token for your bot account</div>
-              <div class="card-divider"></div>
-
-              <div class="form-group">
-                <label for="configBotToken">Bot Access Token</label>
-                <input type="password" id="configBotToken" class="form-input" placeholder="oauth:...">
-                <div class="hint">Connected via Twitch login above. Manually paste if needed.</div>
+              <div class="card config-card">
+                <div class="card-title">Connect / Disconnect Messages</div>
+                <div class="card-desc">Messages the bot sends when it connects or disconnects</div>
+                <div class="card-divider"></div>
+                <div class="form-inline">
+                  <div class="form-group">
+                    <label class="form-switch">
+                      <input type="checkbox" id="connectMsgEnabled">
+                      <div class="switch-track"></div>
+                      Connect message
+                    </label>
+                    <input type="text" id="connectMsg" class="form-input" placeholder="/me is now connected..." style="margin-top:8px">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-switch">
+                      <input type="checkbox" id="disconnectMsgEnabled">
+                      <div class="switch-track"></div>
+                      Disconnect message
+                    </label>
+                    <input type="text" id="disconnectMsg" class="form-input" placeholder="/me disconnected!" style="margin-top:8px">
+                  </div>
+                </div>
               </div>
             </div>
 
