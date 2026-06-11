@@ -50,6 +50,14 @@ function applyBotConfig(bot) {
   botStatus.textContent = bot.TOKEN ? 'Bot Account Connected' : 'Connect Bot Account';
   botStatus.style.color = bot.TOKEN ? 'var(--green)' : '';
 
+  const nickDisplay = document.getElementById('botNickDisplay');
+  if (bot.NICK) {
+    nickDisplay.textContent = bot.NICK;
+    nickDisplay.style.display = '';
+  } else {
+    nickDisplay.style.display = 'none';
+  }
+
   document.getElementById('triggerTag').checked = bot.TRIGGER_TAG !== false;
   document.getElementById('triggerCmd').checked = bot.TRIGGER_CMD !== false;
   document.getElementById('triggerRep').checked = bot.TRIGGER_REP !== false;
@@ -165,7 +173,6 @@ function setupAutoSave() {
     el.addEventListener('change', scheduleAutoSave);
   }
   document.getElementById('configChannel').addEventListener('input', checkSameAccount);
-  document.getElementById('configNick').addEventListener('input', checkSameAccount);
 }
 
 function addChatterContext() {

@@ -45,7 +45,11 @@ async function handleTwitchCallback() {
     statusEl.textContent = 'Bot Account Connected';
     statusEl.style.color = 'var(--green)';
     if (userInfo) {
-      document.getElementById('configNick').value = userInfo.login || '';
+      const nick = userInfo.login || '';
+      document.getElementById('configNick').value = nick;
+      const nickDisplay = document.getElementById('botNickDisplay');
+      nickDisplay.textContent = nick;
+      nickDisplay.style.display = '';
     }
     showToast('Twitch account connected!', 'success');
   } catch (e) {

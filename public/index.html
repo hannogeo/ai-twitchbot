@@ -179,23 +179,22 @@
 
               <div class="form-group">
                 <label>Twitch Bot Account</label>
-                <button class="btn btn-secondary btn-sm" onclick="connectTwitch()">
-                  <span id="botTwitchStatus">Connect Bot Account</span>
-                </button>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <button class="btn btn-secondary btn-sm" onclick="connectTwitch()">
+                    <span id="botTwitchStatus">Connect Bot Account</span>
+                  </button>
+                  <span id="botNickDisplay" style="font-weight:600;display:none"></span>
+                </div>
                 <div class="hint">The account that will send messages in chat.</div>
               </div>
 
               <div class="form-group">
                 <label for="configChannel">Channel Name</label>
                 <input type="text" id="configChannel" class="form-input" placeholder="your_channel_name">
-                <div class="hint">The channel the bot will join (don't include #).</div>
+                <div class="hint">The channel the bot will join.</div>
               </div>
 
-              <div class="form-group">
-                <label for="configNick">Bot Username</label>
-                <input type="text" id="configNick" class="form-input" placeholder="MyBot">
-                <div class="hint">The username of your bot account.</div>
-              </div>
+              <input type="hidden" id="configNick">
               <div id="sameAccountWarning" class="form-warning" style="display:none">Bot username and channel name can't be the same. The bot must be a different account from the channel it operates in.</div>
             </div>
 
