@@ -75,8 +75,11 @@
           <label class="form-checkbox">
             <input type="checkbox" id="authPolicy">
             <span class="checkbox-track"></span>
-            I agree to the <span onclick="showPrivacyPolicy()" style="color:var(--accent);cursor:pointer;text-decoration:underline">Privacy Policy</span>
+            I agree to the Privacy Policy
           </label>
+          <div style="margin-top:4px">
+            <span onclick="showPrivacyPolicy()" style="color:var(--accent);cursor:pointer;text-decoration:underline;font-size:.82rem">Read Privacy Policy</span>
+          </div>
         </div>
         <button id="authSubmitBtn" class="btn btn-primary" style="width:100%;margin-top:4px" onclick="handleAuth()">
           Sign In
