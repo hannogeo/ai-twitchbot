@@ -366,31 +366,6 @@ input, textarea, select, button { font-family: inherit; font-size: .9rem; }
 .profile-form-group label { display: block; font-size: .82rem; font-weight: 500; margin-bottom: 6px; color: var(--text); }
 .profile-status { font-size: .8rem; margin-top: 6px; }
 
-/* Privacy overlay */
-.privacy-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 1001;
-  display: none; align-items: center; justify-content: center;
-  backdrop-filter: blur(2px);
-}
-.privacy-overlay.open { display: flex; }
-.privacy-panel {
-  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg);
-  width: 90%; max-width: 560px; max-height: 70vh;
-  box-shadow: var(--shadow-lg); animation: modalIn .2s ease-out; overflow-y: auto;
-}
-.privacy-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 20px 24px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg2);
-}
-.privacy-header h3 { font-size: 1.05rem; font-weight: 600; color: #f0f6fc; }
-.privacy-close {
-  background: none; border: none; color: var(--text3); font-size: 1.4rem;
-  cursor: pointer; padding: 4px 8px; border-radius: 4px; line-height: 1;
-}
-.privacy-close:hover { color: var(--text); background: var(--bg3); }
-.privacy-body { padding: 20px 24px; font-size: .82rem; color: var(--text2); line-height: 1.6; }
-.privacy-body p { margin-bottom: 12px; }
-
 /* Responsive */
 @media (max-width: 768px) {
   .sidebar { width: 60px; }

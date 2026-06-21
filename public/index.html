@@ -343,13 +343,10 @@
 </div>
 
 <!-- Privacy Policy overlay -->
-<div id="privacyOverlay" class="privacy-overlay" onclick="if(event.target===this)closePrivacyPolicy()">
-  <div class="privacy-panel">
-    <div class="privacy-header">
-      <h3>Privacy Policy</h3>
-      <button class="privacy-close" onclick="closePrivacyPolicy()">&times;</button>
-    </div>
-    <div class="privacy-body">
+<div id="privacyOverlay" class="modal-overlay" onclick="if(event.target===this)closePrivacyPolicy()">
+  <div class="modal" style="max-width:560px;max-height:70vh;overflow-y:auto">
+    <h3 id="privacyTitle" style="font-size:1.05rem;font-weight:600;color:#f0f6fc;margin-bottom:12px">Privacy Policy</h3>
+    <div id="privacyBody" style="font-size:.82rem;color:var(--text2);line-height:1.6">
       <p><strong>Data We Collect</strong></p>
       <p>When you sign up, we collect your email address and display name for authentication purposes. The bot stores your Twitch channel configuration (channel name, bot username, access tokens) and AI settings (system instructions, chatter context) to provide the service.</p>
       <p><strong>How We Use Your Data</strong></p>
@@ -358,6 +355,9 @@
       <p>Data is stored securely via Firebase (Google Cloud Platform). We retain your data for as long as your account is active. You can delete your account at any time through the profile settings, which removes all stored data.</p>
       <p><strong>Contact</strong></p>
       <p>If you have questions about this policy, please contact the project owner.</p>
+    </div>
+    <div class="modal-actions" style="margin-top:16px">
+      <button class="btn btn-primary" onclick="closePrivacyPolicy()">Got it</button>
     </div>
   </div>
 </div>
