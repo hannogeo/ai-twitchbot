@@ -78,7 +78,7 @@
             I agree to the Privacy Policy
           </label>
           <div style="margin-top:4px">
-            <span onclick="showPrivacyPolicy()" style="color:var(--accent);cursor:pointer;text-decoration:underline;font-size:.82rem">Read Privacy Policy</span>
+            <span onclick="document.getElementById('privacyOverlay').classList.add('open')" style="color:var(--accent);cursor:pointer;text-decoration:underline;font-size:.82rem">Read Privacy Policy</span>
           </div>
         </div>
         <button id="authSubmitBtn" class="btn btn-primary" style="width:100%;margin-top:4px" onclick="handleAuth()">
@@ -343,7 +343,7 @@
 </div>
 
 <!-- Privacy Policy overlay -->
-<div id="privacyOverlay" class="modal-overlay" onclick="if(event.target===this)closePrivacyPolicy()">
+<div id="privacyOverlay" class="modal-overlay" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal" style="max-width:560px;max-height:70vh;overflow-y:auto">
     <h3 id="privacyTitle" style="font-size:1.05rem;font-weight:600;color:#f0f6fc;margin-bottom:12px">Privacy Policy</h3>
     <div id="privacyBody" style="font-size:.82rem;color:var(--text2);line-height:1.6">
@@ -357,7 +357,7 @@
       <p>If you have questions about this policy, please contact the project owner.</p>
     </div>
     <div class="modal-actions" style="margin-top:16px">
-      <button class="btn btn-primary" onclick="closePrivacyPolicy()">Got it</button>
+      <button class="btn btn-primary" onclick="document.getElementById('privacyOverlay').classList.remove('open')">Got it</button>
     </div>
   </div>
 </div>
