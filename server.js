@@ -12,6 +12,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors({ origin: true }));
 app.use(express.json());
+app.use(express.static('public'));
 
 const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID;
 const TWITCH_CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET;
